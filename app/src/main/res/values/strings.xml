@@ -80,30 +80,22 @@
     <!-- Label for gender information in the editor [CHAR LIMIT=30] -->
     <string name="category_gender">Gender</string>
 
-    <!-- Label for measurement information in the editor [CHAR LIMIT=30] -->
-    <string name="category_measurement">Measurement</string>
+    <!-- Label for price information in the editor [CHAR LIMIT=30] -->
+    <string name="category_price">Price</string>
 
     <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
     <string name="hint_item_name">Name</string>
 
-    <!-- Text hint for breed field in the editor [CHAR LIMIT=30] -->
-    <string name="hint_item_breed">Breed</string>
+    <!-- Text hint for description field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_item_description">Description</string>
 
-    <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
-    <string name="hint_item_weight">Weight</string>
+    <!-- Text hint for quantity field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_item_quantity">Quantity</string>
 
-    <!-- Units for weight of the item (kilograms) [CHAR LIMIT=5] -->
-    <string name="unit_item_weight">kg</string>
+    <!-- Text hint for price field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_item_price">Price</string>
 
-    <!-- Label for dropdown menu option if the item's gender is unknown [CHAR LIMIT=20] -->
-    <string name="gender_unknown">Unknown</string>
+    <!-- Price of the item (euros) [CHAR LIMIT=5] -->
+    <string name="unit_item_cost">€</string>
 
-    <!-- Label for dropdown menu option if the item is male [CHAR LIMIT=20] -->
-    <string name="gender_male">Male</string>
-
-    <!-- Label for dropdown menu option if the item is female [CHAR LIMIT=20] -->
-    <string name="gender_female">Female</string>
-
-    <!-- Label for the item's breed if the breed is unknown [CHAR LIMIT=20] -->
-    <string name="unknown_breed">Unknown breed</string>
 </resources>
