@@ -16,7 +16,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CatalogActivity">
+    tools:context=".InventoryActivity">
 
     <ListView
         android:id="@+id/list"
@@ -32,10 +32,11 @@
 
         <ImageView
             android:id="@+id/empty_shelter_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:tint="#A2AAB0"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_empty_shelter"/>
+            android:src="@drawable/emoticon_sad"/>
 
         <TextView
             android:id="@+id/empty_title_text"
@@ -68,5 +69,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add_pet"/>
+        android:tint="@android:color/white"
+        android:src="@drawable/ic_add_circle_outline_black_24dp"/>
 </RelativeLayout>

@@ -35,10 +35,10 @@ public class InventoryProvider extends ContentProvider {
     public static final String LOG_TAG = InventoryProvider.class.getSimpleName();
 
     /** URI matcher code for the content URI for the inventory table */
-    private static final int PETS = 100;
+    private static final int ITEMS = 100;
 
     /** URI matcher code for the content URI for a single pet in the inventory table */
-    private static final int PET_ID = 101;
+    private static final int ITEM_ID = 101;
 
     /**
      * UriMatcher object to match a content URI to a corresponding code.
@@ -54,18 +54,18 @@ public class InventoryProvider extends ContentProvider {
         // when a match is found.
 
         // The content URI of the form "content://com.example.android.inventory/inventory" will map to the
-        // integer code {@link #PETS}. This URI is used to provide access to MULTIPLE rows
+        // integer code {@link #ITEMS}. This URI is used to provide access to MULTIPLE rows
         // of the inventory table.
-        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_PETS, PETS);
+        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY, ITEMS);
 
         // The content URI of the form "content://com.example.android.inventory/inventory/#" will map to the
-        // integer code {@link #PET_ID}. This URI is used to provide access to ONE single row
+        // integer code {@link #ITEM_ID}. This URI is used to provide access to ONE single row
         // of the inventory table.
         //
         // In this case, the "#" wildcard is used where "#" can be substituted for an integer.
         // For example, "content://com.example.android.inventory/inventory/3" matches, but
         // "content://com.example.android.inventory/inventory" (without a number at the end) doesn't match.
-        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_PETS + "/#", PET_ID);
+        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY + "/#", ITEM_ID);
     }
 
     /** Database helper object */
@@ -89,15 +89,15 @@ public class InventoryProvider extends ContentProvider {
         // Figure out if the URI matcher can match the URI to a specific code
         int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
-                // For the PETS code, query the inventory table directly with the given
+            case ITEMS:
+                // For the ITEMS code, query the inventory table directly with the given
                 // projection, selection, selection arguments, and sort order. The cursor
                 // could contain multiple rows of the inventory table.
                 cursor = database.query(ItemEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
-            case PET_ID:
-                // For the PET_ID code, extract out the ID from the URI.
+            case ITEM_ID:
+                // For the ITEM_ID code, extract out the ID from the URI.
                 // For an example URI such as "content://com.example.android.inventory/inventory/3",
                 // the selection will be "_id=?" and the selection argument will be a
                 // String array containing the actual ID of 3 in this case.
@@ -130,8 +130,8 @@ public class InventoryProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues contentValues) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
-                return insertPet(uri, contentValues);
+            case ITEMS:
+                return insertItem(uri, contentValues);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
@@ -141,25 +141,35 @@ public class InventoryProvider extends ContentProvider {
      * Insert a pet into the database with the given content values. Return the new content URI
      * for that specific row in the database.
      */
-    private Uri insertPet(Uri uri, ContentValues values) {
+    private Uri insertItem(Uri uri, ContentValues values) {
         // Check that the name is not null
         String name = values.getAsString(ItemEntry.COLUMN_ITEM_NAME);
         if (name == null) {
-            throw new IllegalArgumentException("Pet requires a name");
+            throw new IllegalArgumentException("Item requires a name");
         }
 
-        // If the weight is provided, check that it's greater than or equal to 0 kg
-        Integer weight = values.getAsInteger(ItemEntry.COLUMN_ITEM_COST);
-        if (weight != null && weight < 0) {
-            throw new IllegalArgumentException("Pet requires valid weight");
+        // Check that the description is not null
+        String description = values.getAsString(ItemEntry.COLUMN_ITEM_DESCRIPTION);
+        if (description == null) {
+            throw new IllegalArgumentException("Item requires a name");
         }
 
-        // No need to check the breed, any value is valid (including null).
+        // If the quantity is provided, check that it's > 1
+        Integer quantity = values.getAsInteger(ItemEntry.COLUMN_ITEM_QUANTITY);
+        if (quantity != null && quantity > 1) {
+            throw new IllegalArgumentException("Item requires valid quantity");
+        }
+
+        // If the price is provided, check that it's > 1
+        Integer price = values.getAsInteger(ItemEntry.COLUMN_ITEM_PRICE);
+        if (price != null && price < 0) {
+            throw new IllegalArgumentException("Item requires valid price");
+        }
 
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
-        // Insert the new pet with the given values
+        // Insert the new item with the given values
         long id = database.insert(InventoryContract.ItemEntry.TABLE_NAME, null, values);
         // If the ID is -1, then the insertion failed. Log an error and return null.
         if (id == -1) {
@@ -179,15 +189,15 @@ public class InventoryProvider extends ContentProvider {
                       String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
-                return updatePet(uri, contentValues, selection, selectionArgs);
-            case PET_ID:
-                // For the PET_ID code, extract out the ID from the URI,
+            case ITEMS:
+                return updateItem(uri, contentValues, selection, selectionArgs);
+            case ITEM_ID:
+                // For the ITEM_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = ItemEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                return updatePet(uri, contentValues, selection, selectionArgs);
+                return updateItem(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
@@ -198,7 +208,7 @@ public class InventoryProvider extends ContentProvider {
      * specified in the selection and selection arguments (which could be 0 or 1 or more inventory).
      * Return the number of rows that were successfully updated.
      */
-    private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    private int updateItem(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         // If the {@link ItemEntry#COLUMN_ITEM_NAME} key is present,
         // check that the name value is not null.
         if (values.containsKey(InventoryContract.ItemEntry.COLUMN_ITEM_NAME)) {
@@ -208,26 +218,33 @@ public class InventoryProvider extends ContentProvider {
             }
         }
 
+        // If the {@link ItemEntry#COLUMN_ITEM_DESCRIPTION} key is present,
+        // check that the description value is not null.
+        if (values.containsKey(InventoryContract.ItemEntry.COLUMN_ITEM_DESCRIPTION)) {
+            String description = values.getAsString(ItemEntry.COLUMN_ITEM_DESCRIPTION);
+            if (description == null) {
+                throw new IllegalArgumentException("Item requires a name");
+            }
+        }
+
         // If the {@link ItemEntry#COLUMN_ITEM_QUANTITY} key is present,
         // check that the gender value is valid.
         if (values.containsKey(InventoryContract.ItemEntry.COLUMN_ITEM_QUANTITY)) {
-            Integer gender = values.getAsInteger(ItemEntry.COLUMN_ITEM_QUANTITY);
-            if (gender == null) {
+            Integer quantity = values.getAsInteger(ItemEntry.COLUMN_ITEM_QUANTITY);
+            if (quantity == null) {
                 throw new IllegalArgumentException("Item requires a valid quantity");
             }
         }
 
-        // If the {@link ItemEntry#COLUMN_ITEM_COST} key is present,
-        // check that the weight value is valid.
-        if (values.containsKey(ItemEntry.COLUMN_ITEM_COST)) {
-            // Check that the weight is greater than or equal to 0 kg
-            Integer weight = values.getAsInteger(ItemEntry.COLUMN_ITEM_COST);
-            if (weight != null && weight < 0) {
-                throw new IllegalArgumentException("Pet requires valid weight");
+        // If the {@link ItemEntry#COLUMN_ITEM_PRICE} key is present,
+        // check that the price value is valid.
+        if (values.containsKey(ItemEntry.COLUMN_ITEM_PRICE)) {
+            // Check that the price is greater than or equal to 0 kg
+            Integer price = values.getAsInteger(ItemEntry.COLUMN_ITEM_PRICE);
+            if (price != null && price < 0) {
+                throw new IllegalArgumentException("Pet requires valid price");
             }
         }
-
-        // No need to check the breed, any value is valid (including null).
 
         // If there are no values to update, then don't try to update the database
         if (values.size() == 0) {
@@ -260,11 +277,11 @@ public class InventoryProvider extends ContentProvider {
 
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case ITEMS:
                 // Delete all rows that match the selection and selection args
                 rowsDeleted = database.delete(ItemEntry.TABLE_NAME, selection, selectionArgs);
                 break;
-            case PET_ID:
+            case ITEM_ID:
                 // Delete a single row given by the ID in the URI
                 selection = ItemEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
@@ -288,9 +305,9 @@ public class InventoryProvider extends ContentProvider {
     public String getType(Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case ITEMS:
                 return ItemEntry.CONTENT_LIST_TYPE;
-            case PET_ID:
+            case ITEM_ID:
                 return ItemEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);

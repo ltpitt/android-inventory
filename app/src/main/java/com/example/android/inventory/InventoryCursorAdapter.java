@@ -55,19 +55,29 @@ public class InventoryCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         // Find individual views that need to be modified in list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
-        TextView summaryTextView = (TextView) view.findViewById(R.id.description);
+        TextView descriptionTextView = (TextView) view.findViewById(R.id.description);
+        TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
+        TextView priceTextView = (TextView) view.findViewById(R.id.price);
+
 
         // Find the columns of attributes needed
         int nameColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_NAME);
         int descriptionColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_DESCRIPTION);
+        int quantityColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_QUANTITY);
+        int priceColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_PRICE);
 
         // Read the item attributes from the Cursor for the current item
         String itemName = cursor.getString(nameColumnIndex);
         String itemDescription = cursor.getString(descriptionColumnIndex);
+        String itemQuantity = cursor.getString(quantityColumnIndex);
+        String itemPrice = cursor.getString(priceColumnIndex);
 
 
         // Update the TextViews with the attributes from the current item
         nameTextView.setText(itemName);
-        summaryTextView.setText(itemDescription);
+        descriptionTextView.setText(itemDescription);
+        quantityTextView.setText(itemQuantity);
+        priceTextView.setText("€" + itemPrice);
+
     }
 }

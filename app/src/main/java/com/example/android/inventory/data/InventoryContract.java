@@ -45,14 +45,14 @@ public final class InventoryContract {
     /**
      * Possible path (appended to base content URI for possible URI's)
      * For instance, content://com.example.android.inventory/inventory/ is a valid path for
-     * looking at pet data. content://com.example.android.inventory/staff/ will fail,
+     * looking at item data. content://com.example.android.inventory/staff/ will fail,
      * as the ContentProvider hasn't been given any information on what to do with "staff".
      */
-    public static final String PATH_PETS = "inventory";
+    public static final String PATH_INVENTORY = "inventory";
 
     /**
      * Inner class that defines constant values for the inventory database table.
-     * Each entry in the table represents a single pet.
+     * Each entry in the table represents a single item.
      */
     public static final class ItemEntry implements BaseColumns {
 
@@ -60,16 +60,16 @@ public final class InventoryContract {
          * The MIME type of the {@link #CONTENT_URI} for a list of inventory.
          */
         public static final String CONTENT_LIST_TYPE =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PETS;
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_INVENTORY;
 
         /**
          * The MIME type of the {@link #CONTENT_URI} for a single pet.
          */
         public static final String CONTENT_ITEM_TYPE =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PETS;
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_INVENTORY;
 
         /** The content URI to access the pet data in the provider */
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_PETS);
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_INVENTORY);
 
         /** Name of database table for inventory */
         public final static String TABLE_NAME = "inventory";
@@ -107,7 +107,7 @@ public final class InventoryContract {
          *
          * Type: INTEGER
          */
-        public final static String COLUMN_ITEM_COST = "cost";
+        public final static String COLUMN_ITEM_PRICE = "price";
 
     }
 
