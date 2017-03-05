@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.pets.data;
+package com.example.android.inventory.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.android.pets.data.InventoryContract.PetEntry;
+import com.example.android.inventory.data.InventoryContract.ItemEntry;
 
 /**
  * Database helper for Pets app. Manages database creation and version management.
@@ -29,7 +29,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     public static final String LOG_TAG = InventoryDbHelper.class.getSimpleName();
 
     /** Name of the database file */
-    private static final String DATABASE_NAME = "shelter.db";
+    private static final String DATABASE_NAME = "inventory.db";
 
     /**
      * Database version. If you change the database schema, you must increment the database version.
@@ -50,16 +50,16 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Create a String that contains the SQL statement to create the pets table
-        String SQL_CREATE_PETS_TABLE =  "CREATE TABLE " + PetEntry.TABLE_NAME + " ("
-                + PetEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + PetEntry.COLUMN_PET_NAME + " TEXT NOT NULL, "
-                + PetEntry.COLUMN_PET_BREED + " TEXT, "
-                + PetEntry.COLUMN_PET_GENDER + " INTEGER NOT NULL, "
-                + PetEntry.COLUMN_PET_WEIGHT + " INTEGER NOT NULL DEFAULT 0);";
+        // Create a String that contains the SQL statement to create the inventory table
+        String SQL_CREATE_ITEMS_TABLE =  "CREATE TABLE " + ItemEntry.TABLE_NAME + " ("
+                + InventoryContract.ItemEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + ItemEntry.COLUMN_ITEM_NAME + " TEXT NOT NULL, "
+                + ItemEntry.COLUMN_ITEM_DESCRIPTION + " TEXT, "
+                + ItemEntry.COLUMN_ITEM_QUANTITY + " INTEGER NOT NULL, "
+                + ItemEntry.COLUMN_ITEM_COST + " INTEGER NOT NULL DEFAULT 0);";
 
         // Execute the SQL statement
-        db.execSQL(SQL_CREATE_PETS_TABLE);
+        db.execSQL(SQL_CREATE_ITEMS_TABLE);
     }
 
     /**

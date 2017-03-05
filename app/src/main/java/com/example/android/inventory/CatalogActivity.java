@@ -1,4 +1,4 @@
-package com.example.android.pets;
+package com.example.android.inventory;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -18,10 +18,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.android.pets.data.InventoryContract;
+import com.example.android.inventory.data.InventoryContract;
 
 /**
- * Displays list of pets that were entered and stored in the app.
+ * Displays list of inventory that were entered and stored in the app.
  */
 public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -66,10 +66,10 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
                 // Form the content URI that represents the specific list item that was clicked
                 // by appending the "id" (passed as input to this method) onto the
-                // {@link PetEntry=CONTENT_URI}.
-                // For example, the URI would be "content://com.example.android.pets/pets/2"
+                // {@link ItemEntry=CONTENT_URI}.
+                // For example, the URI would be "content://com.example.android.inventory/inventory/2"
                 // if the item with ID 2 was clicked on
-                Uri currentPetUri = ContentUris.withAppendedId(InventoryContract.PetEntry.CONTENT_URI, id);
+                Uri currentPetUri = ContentUris.withAppendedId(InventoryContract.ItemEntry.CONTENT_URI, id);
 
                 // set the URI on the data field of the intent
                 intent.setData(currentPetUri);
@@ -91,23 +91,23 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         // Create a ContentValues object where column names are the keys,
         // and Toto's pet attributes are the values.
         ContentValues values = new ContentValues();
-        values.put(InventoryContract.PetEntry.COLUMN_PET_NAME, "Toto");
-        values.put(InventoryContract.PetEntry.COLUMN_PET_BREED, "Terrier");
-        values.put(InventoryContract.PetEntry.COLUMN_PET_GENDER, InventoryContract.PetEntry.GENDER_MALE);
-        values.put(InventoryContract.PetEntry.COLUMN_PET_WEIGHT, 7);
+        values.put(InventoryContract.ItemEntry.COLUMN_ITEM_NAME, "Toto");
+        values.put(InventoryContract.ItemEntry.COLUMN_ITEM_DESCRIPTION, "Terrier");
+        values.put(InventoryContract.ItemEntry.COLUMN_ITEM_QUANTITY, 1);
+        values.put(InventoryContract.ItemEntry.COLUMN_ITEM_COST, 7);
 
         // Insert a new row for Toto into the provider using the ContentResolver.
-        // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert
-        // into the pets database table.
+        // Use the {@link ItemEntry#CONTENT_URI} to indicate that we want to insert
+        // into the inventory database table.
         // Receive the new content URI that will allow us to access Toto's data in the future.
-        Uri newUri = getContentResolver().insert(InventoryContract.PetEntry.CONTENT_URI, values);
+        Uri newUri = getContentResolver().insert(InventoryContract.ItemEntry.CONTENT_URI, values);
     }
 
     /**
-     * Helper method to delete all pets in the database.
+     * Helper method to delete all inventory in the database.
      */
     private void deleteAllPets() {
-        int rowsDeleted = getContentResolver().delete(InventoryContract.PetEntry.CONTENT_URI, null, null);
+        int rowsDeleted = getContentResolver().delete(InventoryContract.ItemEntry.CONTENT_URI, null, null);
         Log.v("CatalogActivity", rowsDeleted + " rows deleted from pet database");
     }
 
@@ -140,14 +140,14 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
         // Define a projection that specifies the needed columns from the table
         String[] projection = {
-                InventoryContract.PetEntry._ID,
-                InventoryContract.PetEntry.COLUMN_PET_NAME,
-                InventoryContract.PetEntry.COLUMN_PET_BREED
+                InventoryContract.ItemEntry._ID,
+                InventoryContract.ItemEntry.COLUMN_ITEM_NAME,
+                InventoryContract.ItemEntry.COLUMN_ITEM_DESCRIPTION
         };
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
-                InventoryContract.PetEntry.CONTENT_URI,   // Provider content URI to query
+                InventoryContract.ItemEntry.CONTENT_URI,   // Provider content URI to query
                 projection,             // Columns to include in the resulting Cursor
                 null,                   // No selection clause
                 null,                   // No selection arguments

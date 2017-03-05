@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.pets.data;
+package com.example.android.inventory.data;
 
 import android.content.ContentResolver;
 import android.net.Uri;
@@ -34,7 +34,7 @@ public final class InventoryContract {
      * content authority is the package name for the app, which is guaranteed to be unique on the
      * device.
      */
-    public static final String CONTENT_AUTHORITY = "com.example.android.pets";
+    public static final String CONTENT_AUTHORITY = "com.example.android.inventory";
 
     /**
      * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
@@ -44,20 +44,20 @@ public final class InventoryContract {
 
     /**
      * Possible path (appended to base content URI for possible URI's)
-     * For instance, content://com.example.android.pets/pets/ is a valid path for
-     * looking at pet data. content://com.example.android.pets/staff/ will fail,
+     * For instance, content://com.example.android.inventory/inventory/ is a valid path for
+     * looking at pet data. content://com.example.android.inventory/staff/ will fail,
      * as the ContentProvider hasn't been given any information on what to do with "staff".
      */
-    public static final String PATH_PETS = "pets";
+    public static final String PATH_PETS = "inventory";
 
     /**
-     * Inner class that defines constant values for the pets database table.
+     * Inner class that defines constant values for the inventory database table.
      * Each entry in the table represents a single pet.
      */
-    public static final class PetEntry implements BaseColumns {
+    public static final class ItemEntry implements BaseColumns {
 
         /**
-         * The MIME type of the {@link #CONTENT_URI} for a list of pets.
+         * The MIME type of the {@link #CONTENT_URI} for a list of inventory.
          */
         public static final String CONTENT_LIST_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PETS;
@@ -71,67 +71,43 @@ public final class InventoryContract {
         /** The content URI to access the pet data in the provider */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_PETS);
 
-        /** Name of database table for pets */
-        public final static String TABLE_NAME = "pets";
+        /** Name of database table for inventory */
+        public final static String TABLE_NAME = "inventory";
 
         /**
-         * Unique ID number for the pet (only for use in the database table).
+         * Unique ID number for the item (only for use in the database table).
          *
          * Type: INTEGER
          */
         public final static String _ID = BaseColumns._ID;
 
         /**
-         * Name of the pet.
+         * Name of the item.
          *
          * Type: TEXT
          */
-        public final static String COLUMN_PET_NAME ="name";
+        public final static String COLUMN_ITEM_NAME ="name";
 
         /**
-         * Breed of the pet.
+         * Breed of the item.
          *
          * Type: TEXT
          */
-        public final static String COLUMN_PET_BREED = "breed";
+        public final static String COLUMN_ITEM_DESCRIPTION = "description";
 
         /**
-         * Gender of the pet.
-         *
-         * The only possible values are {@link #GENDER_UNKNOWN}, {@link #GENDER_MALE},
-         * or {@link #GENDER_FEMALE}.
+         * Quantity of the item.
          *
          * Type: INTEGER
          */
-        public final static String COLUMN_PET_GENDER = "gender";
+        public final static String COLUMN_ITEM_QUANTITY = "quantity";
 
         /**
-         * Weight of the pet.
+         * Cost of the item.
          *
          * Type: INTEGER
          */
-        public final static String COLUMN_PET_WEIGHT = "weight";
-
-        /**
-         * Possible values for the gender of the pet.
-         */
-        public static final int GENDER_UNKNOWN = 0;
-        public static final int GENDER_MALE = 1;
-        public static final int GENDER_FEMALE = 2;
-
-
-        /**
-         * Returns whether or not the given gender is {@link #GENDER_UNKNOWN}, {@link #GENDER_MALE}, 
-         * or {@link #GENDER_FEMALE}.
-         */
-        public static boolean isValidGender(int gender) {
-            if (gender == GENDER_UNKNOWN || gender == GENDER_MALE || gender == GENDER_FEMALE) {
-                return true;
-            }
-            return false;
-        }
-
-
+        public final static String COLUMN_ITEM_COST = "cost";
 
     }
 

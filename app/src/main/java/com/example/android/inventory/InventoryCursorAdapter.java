@@ -1,15 +1,14 @@
-package com.example.android.pets;
+package com.example.android.inventory;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import com.example.android.pets.data.InventoryContract;
+import com.example.android.inventory.data.InventoryContract;
 
 /**
  * {@link InventoryCursorAdapter} is an adapter for a list or grid view
@@ -56,24 +55,19 @@ public class InventoryCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         // Find individual views that need to be modified in list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
-        TextView summaryTextView = (TextView) view.findViewById(R.id.summary);
+        TextView summaryTextView = (TextView) view.findViewById(R.id.description);
 
         // Find the columns of attributes needed
-        int nameColumnIndex = cursor.getColumnIndex(InventoryContract.PetEntry.COLUMN_PET_NAME);
-        int breedColumnIndex = cursor.getColumnIndex(InventoryContract.PetEntry.COLUMN_PET_BREED);
+        int nameColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_NAME);
+        int descriptionColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_DESCRIPTION);
 
         // Read the item attributes from the Cursor for the current item
-        String petName = cursor.getString(nameColumnIndex);
-        String petBreed = cursor.getString(breedColumnIndex);
+        String itemName = cursor.getString(nameColumnIndex);
+        String itemDescription = cursor.getString(descriptionColumnIndex);
 
-        // If the pet breed is empty string or null, then use some default text
-        // that says "Unknown breed", so the TextView isn't blank.
-        if (TextUtils.isEmpty(petBreed)) {
-            petBreed = context.getString(R.string.unknown_breed);
-        }
 
         // Update the TextViews with the attributes from the current item
-        nameTextView.setText(petName);
-        summaryTextView.setText(petBreed);
+        nameTextView.setText(itemName);
+        summaryTextView.setText(itemDescription);
     }
 }

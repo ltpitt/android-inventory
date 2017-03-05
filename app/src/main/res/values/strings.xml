@@ -98,4 +98,16 @@
     <!-- Price of the item (euros) [CHAR LIMIT=5] -->
     <string name="unit_item_cost">€</string>
 
+
+
+
+
+
+    <!-- Price of the item (euros) [CHAR LIMIT=5] -->
+    <string name="gender_unknown">Unknown</string>
+    <!-- Price of the item (euros) [CHAR LIMIT=5] -->
+    <string name="gender_male">Male</string>
+    <!-- Price of the item (euros) [CHAR LIMIT=5] -->
+    <string name="gender_female">Female</string>
+
 </resources>
