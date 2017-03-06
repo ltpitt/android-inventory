@@ -75,11 +75,14 @@
     <!-- Dialog button text for the option to cancel deletion of the current item [CHAR LIMIT=20] -->
     <string name="cancel">Cancel</string>
 
-    <!-- Label for overview category of attributes in the editor [CHAR LIMIT=30] -->
-    <string name="category_overview">Overview</string>
+    <!-- Label for name category of attributes in the editor [CHAR LIMIT=30] -->
+    <string name="category_name">Name</string>
 
-    <!-- Label for gender information in the editor [CHAR LIMIT=30] -->
-    <string name="category_gender">Gender</string>
+    <!-- Label for description category of attributes in the editor [CHAR LIMIT=30] -->
+    <string name="category_description">Description</string>
+
+    <!-- Label for quantity information in the editor [CHAR LIMIT=30] -->
+    <string name="category_quantity">Quantity</string>
 
     <!-- Label for price information in the editor [CHAR LIMIT=30] -->
     <string name="category_price">Price</string>
