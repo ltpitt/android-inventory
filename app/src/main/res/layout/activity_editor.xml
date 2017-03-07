@@ -109,13 +109,51 @@
                 android:id="@+id/edit_item_quantity"
                 android:hint="@string/hint_item_quantity"
                 android:inputType="textCapWords"
+                android:visibility="gone"
                 style="@style/EditorFieldStyle" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+
+                <Button
+                    android:id="@+id/button_minus_score_left"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:onClick="decrement_quantity"
+                    android:text="-" />
+
+                <TextView
+                    android:id="@+id/text_item_quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+
+                    />
+
+                <Button
+                    android:id="@+id/button_plus_score_left"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:onClick="increment_quantity"
+                    android:text="+" />
+
+
+            </LinearLayout>
 
         </RelativeLayout>
     </LinearLayout>
-
-
-
 
     <!-- Price category -->
     <LinearLayout
@@ -141,6 +179,7 @@
                 android:id="@+id/edit_item_price"
                 android:hint="@string/hint_item_price"
                 android:inputType="number"
+                android:gravity="center"
                 style="@style/EditorFieldStyle" />
 
             <!-- Units for weight (kg) -->
@@ -152,46 +191,7 @@
     </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp">
 
-
-        <Button
-            android:id="@+id/button_minus_score_left"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:onClick="decrement_left_score"
-            android:text="-" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:paddingBottom="16dp"
-            android:paddingTop="16dp"
-            android:text="Score"
-            android:textAppearance="?android:textAppearanceLarge"
-            android:textColor="#000"
-            android:textSize="16sp"
-
-            />
-
-        <Button
-            android:id="@+id/button_plus_score_left"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:onClick="increment_left_score"
-            android:text="+" />
-
-
-    </LinearLayout>
 
 
 

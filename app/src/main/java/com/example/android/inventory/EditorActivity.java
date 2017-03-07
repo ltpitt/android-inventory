@@ -34,6 +34,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.inventory.data.InventoryContract;
@@ -60,19 +61,26 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private EditText mNameEditText;
 
     /**
-     * EditText field to enter the item's breed
+     * EditText field to enter the item's description
      */
     private EditText mDescriptionEditText;
 
     /**
-     * EditText field to enter the item's weight
+     * EditText field to enter the item's quantity
      */
     private EditText mQuantityEditText;
 
     /**
      * EditText field to enter the item's weight
      */
+    private TextView mQuantityText;
+
+
+    /**
+     * EditText field to enter the item's price
+     */
     private EditText mPriceEditText;
+
 
     /**
      * Boolean flag that keeps track of whether the item has been edited (true) or not (false)
@@ -91,6 +99,27 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             return false;
         }
     };
+
+
+    /**
+     * This method increments the item quantity
+     */
+    public void increment_quantity(View view) {
+        int itemQuantity = Integer.parseInt(mQuantityText.getText().toString());
+        itemQuantity += 1;
+        mQuantityText.setText(String.valueOf(itemQuantity));
+        mQuantityEditText.setText(String.valueOf(itemQuantity));
+    }
+
+    /**
+     * This method decrements the left score value on the screen.
+     */
+    public void decrement_quantity(View view) {
+        int itemQuantity = Integer.parseInt(mQuantityText.getText().toString());
+        itemQuantity -= 1;
+        mQuantityText.setText(String.valueOf(itemQuantity));
+        mQuantityEditText.setText(String.valueOf(itemQuantity));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +149,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mNameEditText = (EditText) findViewById(R.id.edit_item_name);
         mDescriptionEditText = (EditText) findViewById(R.id.edit_item_description);
         mQuantityEditText = (EditText) findViewById(R.id.edit_item_quantity);
+        mQuantityText = (TextView) findViewById(R.id.text_item_quantity);
         mPriceEditText = (EditText) findViewById(R.id.edit_item_price);
 
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
@@ -349,7 +379,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             mNameEditText.setText(name);
             mDescriptionEditText.setText(description);
             mQuantityEditText.setText(Integer.toString(quantity));
+            // Put same quantity data into mQuantityText
+            mQuantityText.setText(Integer.toString(quantity));
             mPriceEditText.setText(Integer.toString(price));
+
 
         }
     }
