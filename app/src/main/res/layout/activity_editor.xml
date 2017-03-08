@@ -120,11 +120,11 @@
 
 
                 <Button
-                    android:id="@+id/button_minus_score_left"
+                    android:id="@+id/button_sell_item"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:onClick="decrement_quantity"
+                    android:onClick="decrementQuantity"
                     android:text="-" />
 
                 <TextView
@@ -142,11 +142,11 @@
                     />
 
                 <Button
-                    android:id="@+id/button_plus_score_left"
+                    android:id="@+id/button_buy_item"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:onClick="increment_quantity"
+                    android:onClick="incrementQuantity"
                     android:text="+" />
 
 
@@ -191,7 +191,30 @@
     </LinearLayout>
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:gravity="center|bottom"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/button_order_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="orderMore"
+                android:layout_gravity="bottom"
+                android:text="Order more" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 

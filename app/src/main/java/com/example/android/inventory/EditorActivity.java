@@ -15,6 +15,7 @@
  */
 package com.example.android.inventory;
 
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,6 +34,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -101,10 +104,23 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     };
 
 
+
+
+
+    /**
+     * This method orders more items
+     */
+    public void orderMore(View view) {
+        int itemQuantity = Integer.parseInt(mQuantityText.getText().toString());
+        itemQuantity += 1;
+        mQuantityText.setText(String.valueOf(itemQuantity));
+        mQuantityEditText.setText(String.valueOf(itemQuantity));
+    }
+
     /**
      * This method increments the item quantity
      */
-    public void increment_quantity(View view) {
+    public void incrementQuantity(View view) {
         int itemQuantity = Integer.parseInt(mQuantityText.getText().toString());
         itemQuantity += 1;
         mQuantityText.setText(String.valueOf(itemQuantity));
@@ -114,9 +130,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     /**
      * This method decrements the left score value on the screen.
      */
-    public void decrement_quantity(View view) {
+    public void decrementQuantity(View view) {
         int itemQuantity = Integer.parseInt(mQuantityText.getText().toString());
-        itemQuantity -= 1;
+        if (itemQuantity > 0) {
+            itemQuantity -= 1;
+        } else {
+            itemQuantity = 0;
+        }
         mQuantityText.setText(String.valueOf(itemQuantity));
         mQuantityEditText.setText(String.valueOf(itemQuantity));
     }
@@ -160,8 +180,38 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
 
-    }
+        // Find a reference to button_order_more in the layout
+        final Button button = (Button) findViewById(R.id.button_order_more);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
+                String introduction = "Dear Sir/Madam,\n\nPlease find here my new order details:\n\n";
+
+                String order = "Product name: " + mNameEditText.getText() + "\n" +
+                        "Product description: " + mDescriptionEditText.getText() + "\n" +
+                        "Product quantity: " + mQuantityText.getText() + "\n" +
+                        "Product price: " + mPriceEditText.getText() + "\n\n" +
+                        "Total price: " + Integer.parseInt(mPriceEditText.getText().toString()) * Integer.parseInt(mQuantityText.getText().toString()) + "\n\n\n";
+
+                String signature = "Kind regards";
+
+                String mailto = "mailto:d.nastri@gmail.com" +
+                        "?cc=" + "d.nastri@gmail.com" +
+                        "&subject=" + Uri.encode("New order") +
+                        "&body=" + Uri.encode(introduction + order + signature);
+
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                emailIntent.setData(Uri.parse(mailto));
+
+                try {
+                    startActivity(emailIntent);
+                } catch (ActivityNotFoundException e) {
+                    Log.e("Error: ", "No email app available");
+                }
+
+            }
+        });
+    }
 
     /**
      * Get user input from editor and save new item into database.
