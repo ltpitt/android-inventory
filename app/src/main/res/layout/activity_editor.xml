@@ -188,8 +188,9 @@
                 android:text="@string/unit_item_cost"
                 style="@style/EditorUnitsStyle"/>
         </RelativeLayout>
-    </LinearLayout>
 
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -197,24 +198,42 @@
         android:orientation="vertical"
         >
 
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
             android:gravity="center|bottom"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:weightSum="1">
+
+
+            <ImageView
+                android:id="@+id/pic_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.72"
+                android:alpha="0.5"
+                android:src="@drawable/ic_add_a_photo_black_24dp"
+                android:tint="#A2AAB0"
+                android:onClick="uploadPic"
+                />
+
 
             <Button
                 android:id="@+id/button_order_more"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="orderMore"
-                android:layout_gravity="bottom"
                 android:text="Order more" />
 
         </LinearLayout>
 
     </LinearLayout>
+
+
+
 
 
 

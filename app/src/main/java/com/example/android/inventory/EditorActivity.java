@@ -15,13 +15,16 @@
  */
 package com.example.android.inventory;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
@@ -34,14 +37,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.inventory.data.InventoryContract;
 import com.example.android.inventory.data.InventoryContract.ItemEntry;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Allows user to create a new item or edit an existing one.
@@ -84,6 +91,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
      */
     private EditText mPriceEditText;
 
+    /**
+     * ImageView containing the item's pic
+     */
+    private ImageView mPicImageView;
+
 
     /**
      * Boolean flag that keeps track of whether the item has been edited (true) or not (false)
@@ -116,6 +128,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mQuantityText.setText(String.valueOf(itemQuantity));
         mQuantityEditText.setText(String.valueOf(itemQuantity));
     }
+
+    /**
+     * This method uploads a picture for the item
+     */
+    private static final int GET_FROM_GALLERY = 0;
+
+    public void uploadPic(View view) {
+        startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+    }
+
 
     /**
      * This method increments the item quantity
@@ -171,6 +193,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mQuantityEditText = (EditText) findViewById(R.id.edit_item_quantity);
         mQuantityText = (TextView) findViewById(R.id.text_item_quantity);
         mPriceEditText = (EditText) findViewById(R.id.edit_item_price);
+        mPicImageView = (ImageView) findViewById(R.id.pic_image_view);
 
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
@@ -289,6 +312,31 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             }
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        //Detects request codes
+        if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = data.getData();
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                mPicImageView.setImageBitmap(bitmap);
+
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
