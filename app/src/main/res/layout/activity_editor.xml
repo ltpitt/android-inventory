@@ -217,7 +217,7 @@
                 android:alpha="0.5"
                 android:src="@drawable/ic_add_a_photo_black_24dp"
                 android:tint="#A2AAB0"
-                android:onClick="uploadPic"
+                android:onClick="openImageSelector"
                 />
 
 

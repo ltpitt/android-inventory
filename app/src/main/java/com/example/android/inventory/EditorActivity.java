@@ -314,7 +314,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
     }
 
-    public void uploadPic(View view) {
+    public void openImageSelector(View view) {
         Intent intent;
 
         if (Build.VERSION.SDK_INT < 19) {
@@ -342,7 +342,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             if (resultData != null) {
                 Uri mUri = resultData.getData();
                 Log.i(LOG_TAG, "Uri: " + mUri.toString());
-
                 mPicImageView.setImageBitmap(getBitmapFromUri(mUri));
             }
         }
