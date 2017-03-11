@@ -1,8 +1,7 @@
 Inventory  App
 ===================================
 
-This app displays a list of pets and their related data that the user inputs.
-Used in a Udacity course in the Android Basics Nanodegree by Google.
+This app displays an inventory list of items and their related data that the user inputs.
 
 Pre-requisites
 --------------
