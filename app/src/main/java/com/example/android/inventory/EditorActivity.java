@@ -524,7 +524,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 InventoryContract.ItemEntry.COLUMN_ITEM_NAME,
                 InventoryContract.ItemEntry.COLUMN_ITEM_DESCRIPTION,
                 InventoryContract.ItemEntry.COLUMN_ITEM_QUANTITY,
-                InventoryContract.ItemEntry.COLUMN_ITEM_PRICE};
+                InventoryContract.ItemEntry.COLUMN_ITEM_PRICE,
+                InventoryContract.ItemEntry.COLUMN_ITEM_IMAGE
+        };
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -557,7 +559,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             String description = cursor.getString(descriptionColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             int price = cursor.getInt(priceColumnIndex);
-            byte[] image = cursor.getBlob(imageColumnIndex);
+            // Check if image is null
+            byte [] image = null;
+            if (cursor.getBlob(imageColumnIndex) != null) {
+                image = cursor.getBlob(imageColumnIndex);
+            }
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
@@ -567,9 +573,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             mQuantityText.setText(Integer.toString(quantity));
             mPriceEditText.setText(Integer.toString(price));
 
-            Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
-            mPicImageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, mPicImageView.getWidth(),
-                    mPicImageView.getHeight(), false));
+            if (image != null) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+                mPicImageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, mPicImageView.getWidth(),
+                        mPicImageView.getHeight(), false));
+            }
 
 
         }

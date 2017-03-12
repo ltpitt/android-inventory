@@ -13,7 +13,7 @@ import com.example.android.inventory.data.InventoryContract;
 /**
  * {@link InventoryCursorAdapter} is an adapter for a list or grid view
  * that uses a {@link Cursor} of pet data as its data source. This adapter knows
- * how to create list items for each row of pet data in the {@link Cursor}.
+ * how to create list items for each row of item data in the {@link Cursor}.
  */
 public class InventoryCursorAdapter extends CursorAdapter {
 

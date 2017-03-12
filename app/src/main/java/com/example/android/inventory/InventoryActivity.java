@@ -146,7 +146,8 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
                 InventoryContract.ItemEntry.COLUMN_ITEM_NAME,
                 InventoryContract.ItemEntry.COLUMN_ITEM_DESCRIPTION,
                 InventoryContract.ItemEntry.COLUMN_ITEM_QUANTITY,
-                InventoryContract.ItemEntry.COLUMN_ITEM_PRICE
+                InventoryContract.ItemEntry.COLUMN_ITEM_PRICE,
+                InventoryContract.ItemEntry.COLUMN_ITEM_IMAGE
         };
 
         // This loader will execute the ContentProvider's query method on a background thread
