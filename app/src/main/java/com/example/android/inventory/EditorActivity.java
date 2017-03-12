@@ -23,10 +23,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
@@ -103,6 +105,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
      * Boolean flag that keeps track of whether the item has been edited (true) or not (false)
      */
     private boolean mItemHasChanged = false;
+
+    /**
+     * ID number assigned to Pick Image Request
+     */
 
     private static final int PICK_IMAGE_REQUEST = 0;
 
@@ -339,10 +345,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // Instead, a URI to that document will be contained in the return intent
             // provided to this method as a parameter.  Pull that uri using "resultData.getData()"
 
+
             if (resultData != null) {
                 Uri mUri = resultData.getData();
                 Log.i(LOG_TAG, "Uri: " + mUri.toString());
                 mPicImageView.setImageBitmap(getBitmapFromUri(mUri));
+                mPicImageView.setImageAlpha(255);
             }
         }
     }
