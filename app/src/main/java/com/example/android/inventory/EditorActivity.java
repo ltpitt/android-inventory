@@ -23,12 +23,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
@@ -50,6 +48,7 @@ import android.widget.Toast;
 import com.example.android.inventory.data.InventoryContract;
 import com.example.android.inventory.data.InventoryContract.ItemEntry;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -142,11 +141,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     /**
-     * This method uploads a picture for the item
-     */
-    private static final int GET_FROM_GALLERY = 0;
-
-    /**
      * This method increments the item quantity
      */
     public void incrementQuantity(View view) {
@@ -160,7 +154,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
      * This method decrements the left score value on the screen.
      */
     public void decrementQuantity(View view) {
+
         int itemQuantity = Integer.parseInt(mQuantityText.getText().toString());
+
         if (itemQuantity > 0) {
             itemQuantity -= 1;
         } else {
@@ -211,6 +207,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mPriceEditText.setOnTouchListener(mTouchListener);
         mPicImageView.setOnTouchListener(mTouchListener);
 
+        // If no item has no quantity then we set it to 0
+        if (mQuantityText.getText().toString().isEmpty()) {
+            mQuantityText.setText("0");
+            mQuantityEditText.setText(String.valueOf(0));
+        }
+
+
         // Find a reference to button_order_more in the layout
         final Button button = (Button) findViewById(R.id.button_order_more);
         button.setOnClickListener(new View.OnClickListener() {
@@ -254,6 +257,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String descriptionString = mDescriptionEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
+        // Turn mPicImageView into byte array
+        Bitmap bitmap = ((BitmapDrawable) mPicImageView.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] picByteArray = baos.toByteArray();
+
 
         // Check if this is supposed to be a new item
         // and check if all the fields in the editor are blank
@@ -272,6 +281,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         values.put(InventoryContract.ItemEntry.COLUMN_ITEM_DESCRIPTION, descriptionString);
         values.put(InventoryContract.ItemEntry.COLUMN_ITEM_QUANTITY, quantityString);
         values.put(InventoryContract.ItemEntry.COLUMN_ITEM_PRICE, priceString);
+        values.put(InventoryContract.ItemEntry.COLUMN_ITEM_PICTURE, picByteArray);
+
+
+
 
         Log.i("Updating values: ", values.toString());
 
