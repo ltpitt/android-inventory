@@ -209,6 +209,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mDescriptionEditText.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
+        mPicImageView.setOnTouchListener(mTouchListener);
 
         // Find a reference to button_order_more in the layout
         final Button button = (Button) findViewById(R.id.button_order_more);

@@ -19,6 +19,8 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import java.sql.Blob;
+
 /**
  * API Contract for the Pets app.
  */
@@ -89,7 +91,7 @@ public final class InventoryContract {
         public final static String COLUMN_ITEM_NAME ="name";
 
         /**
-         * Breed of the item.
+         * Item's description.
          *
          * Type: TEXT
          */
@@ -108,6 +110,15 @@ public final class InventoryContract {
          * Type: INTEGER
          */
         public final static String COLUMN_ITEM_PRICE = "price";
+
+
+        /**
+         * Item's image.
+         *
+         * Type: BLOB
+         */
+        public final static String COLUMN_ITEM_IMAGE = "image";
+
 
     }
 

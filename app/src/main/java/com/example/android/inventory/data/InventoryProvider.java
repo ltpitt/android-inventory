@@ -26,6 +26,8 @@ import android.util.Log;
 
 import com.example.android.inventory.data.InventoryContract.ItemEntry;
 
+import java.sql.Blob;
+
 /**
  * {@link ContentProvider} for Pets app.
  */
@@ -166,6 +168,8 @@ public class InventoryProvider extends ContentProvider {
             throw new IllegalArgumentException("Item requires valid price");
         }
 
+        byte[] image = values.getAsByteArray(ItemEntry.COLUMN_ITEM_IMAGE);
+
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
@@ -244,6 +248,10 @@ public class InventoryProvider extends ContentProvider {
             if (price != null && price < 0) {
                 throw new IllegalArgumentException("Pet requires valid price");
             }
+        }
+
+        if (values.containsKey(ItemEntry.COLUMN_ITEM_IMAGE)) {
+            byte[] image = values.getAsByteArray(ItemEntry.COLUMN_ITEM_IMAGE);
         }
 
         // If there are no values to update, then don't try to update the database
