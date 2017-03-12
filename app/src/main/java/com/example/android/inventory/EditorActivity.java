@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -176,14 +175,17 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         Intent intent = getIntent();
         mCurrentItemUri = intent.getData();
 
+        Button mButtonOrderMore = (Button) findViewById(R.id.button_order_more);
+
         // If the intent does not contain a content URI then we are creating a new item
         if (mCurrentItemUri == null) {
             // This is a new item, so change the app bar to say "Add a item"
             setTitle(getString(R.string.editor_activity_title_new_item));
+            mButtonOrderMore.setVisibility(View.INVISIBLE);
         } else {
             // Otherwise this is an existing item, so change app bar to say "Edit Item"
             setTitle(getString(R.string.editor_activity_title_edit_item));
-
+            mButtonOrderMore.setVisibility(View.VISIBLE);
             // Initialize a loader to read the item data from the database
             // and display the current values in the editor
             getSupportLoaderManager().initLoader(EXISTING_ITEM_LOADER, null, this);
@@ -257,12 +259,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String descriptionString = mDescriptionEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
+
         // Turn mPicImageView into byte array
-        Bitmap bitmap = ((BitmapDrawable) mPicImageView.getDrawable()).getBitmap();
+
+        mPicImageView.setDrawingCacheEnabled(true);
+        mPicImageView.buildDrawingCache();
+        Bitmap bitmap = mPicImageView.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] picByteArray = baos.toByteArray();
-
 
         // Check if this is supposed to be a new item
         // and check if all the fields in the editor are blank
@@ -281,10 +286,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         values.put(InventoryContract.ItemEntry.COLUMN_ITEM_DESCRIPTION, descriptionString);
         values.put(InventoryContract.ItemEntry.COLUMN_ITEM_QUANTITY, quantityString);
         values.put(InventoryContract.ItemEntry.COLUMN_ITEM_PRICE, priceString);
-        values.put(InventoryContract.ItemEntry.COLUMN_ITEM_PICTURE, picByteArray);
-
-
-
+        values.put(InventoryContract.ItemEntry.COLUMN_ITEM_IMAGE, picByteArray);
 
         Log.i("Updating values: ", values.toString());
 
@@ -545,15 +547,17 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (cursor.moveToFirst()) {
             // Find the columns of item attributes that we're interested in
             int nameColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_NAME);
-            int descriptionColumnIndex = cursor.getColumnIndex(ItemEntry.COLUMN_ITEM_DESCRIPTION);
-            int quantityColumnIndex = cursor.getColumnIndex(ItemEntry.COLUMN_ITEM_QUANTITY);
-            int priceColumnIndex = cursor.getColumnIndex(ItemEntry.COLUMN_ITEM_PRICE);
+            int descriptionColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_DESCRIPTION);
+            int quantityColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_QUANTITY);
+            int priceColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_PRICE);
+            int imageColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_IMAGE);
 
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
             String description = cursor.getString(descriptionColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             int price = cursor.getInt(priceColumnIndex);
+            byte[] image = cursor.getBlob(imageColumnIndex);
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
@@ -562,6 +566,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // Put same quantity data into mQuantityText
             mQuantityText.setText(Integer.toString(quantity));
             mPriceEditText.setText(Integer.toString(price));
+
+            Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+            mPicImageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, mPicImageView.getWidth(),
+                    mPicImageView.getHeight(), false));
 
 
         }

@@ -156,7 +156,8 @@ public class InventoryProvider extends ContentProvider {
 
         // If the quantity is provided, check that it's > 1
         Integer quantity = values.getAsInteger(ItemEntry.COLUMN_ITEM_QUANTITY);
-        if (quantity != null && quantity > 1) {
+        Log.e(LOG_TAG, "Quantity: " + quantity.toString());
+        if (quantity != null && quantity < 1) {
             throw new IllegalArgumentException("Item requires valid quantity");
         }
 
@@ -166,7 +167,7 @@ public class InventoryProvider extends ContentProvider {
             throw new IllegalArgumentException("Item requires valid price");
         }
 
-        byte[] image = values.getAsByteArray(ItemEntry.COLUMN_ITEM_PICTURE);
+        byte[] image = values.getAsByteArray(ItemEntry.COLUMN_ITEM_IMAGE);
 
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
@@ -248,8 +249,8 @@ public class InventoryProvider extends ContentProvider {
             }
         }
 
-        if (values.containsKey(ItemEntry.COLUMN_ITEM_PICTURE)) {
-            byte[] image = values.getAsByteArray(ItemEntry.COLUMN_ITEM_PICTURE);
+        if (values.containsKey(ItemEntry.COLUMN_ITEM_IMAGE)) {
+            byte[] image = values.getAsByteArray(ItemEntry.COLUMN_ITEM_IMAGE);
         }
 
         // If there are no values to update, then don't try to update the database

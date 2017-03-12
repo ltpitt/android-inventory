@@ -117,7 +117,7 @@ public final class InventoryContract {
          *
          * Type: BLOB
          */
-        public final static String COLUMN_ITEM_PICTURE = "image";
+        public final static String COLUMN_ITEM_IMAGE = "image";
 
 
     }
