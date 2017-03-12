@@ -271,9 +271,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         // Check if this is supposed to be a new item
         // and check if all the fields in the editor are blank
-        if (mCurrentItemUri == null &&
-                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(descriptionString) &&
-                TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(priceString)) {
+        if (mCurrentItemUri == null ||
+                TextUtils.isEmpty(nameString) || TextUtils.isEmpty(descriptionString) ||
+                TextUtils.isEmpty(quantityString) || TextUtils.isEmpty(priceString)) {
+            Log.e(LOG_TAG, "User did not enter all the required fields");
             // Since no fields were modified, we can return early without creating a new item.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;
