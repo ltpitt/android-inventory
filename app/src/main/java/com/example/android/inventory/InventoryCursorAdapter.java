@@ -1,12 +1,18 @@
 package com.example.android.inventory;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.inventory.data.InventoryContract;
 
@@ -58,18 +64,20 @@ public class InventoryCursorAdapter extends CursorAdapter {
         TextView descriptionTextView = (TextView) view.findViewById(R.id.description);
         TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
         TextView priceTextView = (TextView) view.findViewById(R.id.price);
-
+        Button sellItemButton = (Button) view.findViewById(R.id.button_sell_item_list);
 
         // Find the columns of attributes needed
+        int idColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry._ID);
         int nameColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_NAME);
         int descriptionColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_DESCRIPTION);
         int quantityColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_QUANTITY);
         int priceColumnIndex = cursor.getColumnIndex(InventoryContract.ItemEntry.COLUMN_ITEM_PRICE);
 
         // Read the item attributes from the Cursor for the current item
+        final String idColumn = cursor.getString(idColumnIndex);
         String itemName = cursor.getString(nameColumnIndex);
         String itemDescription = cursor.getString(descriptionColumnIndex);
-        String itemQuantity = cursor.getString(quantityColumnIndex);
+        final String itemQuantity = cursor.getString(quantityColumnIndex);
         String itemPrice = cursor.getString(priceColumnIndex);
 
 
@@ -78,6 +86,22 @@ public class InventoryCursorAdapter extends CursorAdapter {
         descriptionTextView.setText(itemDescription);
         quantityTextView.setText(itemQuantity);
         priceTextView.setText("€" + itemPrice);
+
+        sellItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContentResolver resolver = v.getContext().getContentResolver();
+                ContentValues values = new ContentValues();
+                int itemQuantityInt = Integer.parseInt(itemQuantity);
+                if (itemQuantityInt > 0) {
+                    Integer itemId = Integer.parseInt(idColumn);
+                    Integer newQuantityValue = itemQuantityInt - 1;
+                    values.put(InventoryContract.ItemEntry.COLUMN_ITEM_QUANTITY, newQuantityValue);
+                    Uri currentItemUri = ContentUris.withAppendedId(InventoryContract.ItemEntry.CONTENT_URI, itemId);
+                    resolver.update(currentItemUri, values, null, null);
+                }
+            }
+        });
 
     }
 }

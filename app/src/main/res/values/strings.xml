@@ -46,7 +46,7 @@
     <string name="editor_insert_item_failed">Error with saving item</string>
 
     <!-- Toast message in editor when current item was successfully updated [CHAR LIMIT=NONE] -->
-    <string name="editor_update_item_successful">item updated</string>
+    <string name="editor_update_item_successful">Item updated</string>
 
     <!-- Toast message in editor when current item has failed to be updated [CHAR LIMIT=NONE] -->
     <string name="editor_update_item_failed">Error with updating item</string>

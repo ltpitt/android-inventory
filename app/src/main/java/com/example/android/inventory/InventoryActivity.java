@@ -16,7 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.android.inventory.data.InventoryContract;
 
@@ -63,17 +65,14 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Create new intent to go to {@link EditorActivity}
                 Intent intent = new Intent(InventoryActivity.this, EditorActivity.class);
-
                 // Form the content URI that represents the specific list item that was clicked
                 // by appending the "id" (passed as input to this method) onto the
                 // {@link ItemEntry=CONTENT_URI}.
                 // For example, the URI would be "content://com.example.android.inventory/inventory/2"
                 // if the item with ID 2 was clicked on
                 Uri currentItemUri = ContentUris.withAppendedId(InventoryContract.ItemEntry.CONTENT_URI, id);
-
                 // set the URI on the data field of the intent
                 intent.setData(currentItemUri);
-
                 // Launch the {@link EditorActivity} to display the data for the current item
                 startActivity(intent);
             }

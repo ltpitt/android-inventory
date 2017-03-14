@@ -259,38 +259,28 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String descriptionString = mDescriptionEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
-
         // Turn mPicImageView into byte array
-
         mPicImageView.setDrawingCacheEnabled(true);
         mPicImageView.buildDrawingCache();
         Bitmap bitmap = mPicImageView.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] picByteArray = baos.toByteArray();
-
-        // Check if this is supposed to be a new item
-        // and check if all the fields in the editor are blank
-        if (mCurrentItemUri == null ||
-                TextUtils.isEmpty(nameString) || TextUtils.isEmpty(descriptionString) ||
+        // Check if all the fields in the editor are blank
+        if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(descriptionString) ||
                 TextUtils.isEmpty(quantityString) || TextUtils.isEmpty(priceString)) {
+            Toast.makeText(getApplicationContext(), "User did not enter all the required fields",
+                    Toast.LENGTH_LONG).show();
             Log.e(LOG_TAG, "User did not enter all the required fields");
             // Since no fields were modified, we can return early without creating a new item.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;
         }
-
         // Create a ContentValues object where column names are the keys,
         // and item attributes from the editor are the values.
         ContentValues values = new ContentValues();
         values.put(InventoryContract.ItemEntry.COLUMN_ITEM_NAME, nameString);
         values.put(InventoryContract.ItemEntry.COLUMN_ITEM_DESCRIPTION, descriptionString);
-        values.put(InventoryContract.ItemEntry.COLUMN_ITEM_QUANTITY, quantityString);
-        values.put(InventoryContract.ItemEntry.COLUMN_ITEM_PRICE, priceString);
-        values.put(InventoryContract.ItemEntry.COLUMN_ITEM_IMAGE, picByteArray);
-
-        Log.i("Updating values: ", values.toString());
-
         // If the quantity is not provided by the user, don't try to parse the string into an
         // integer value. Use 0 by default.
         int quantity = 1;
@@ -298,24 +288,23 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             quantity = Integer.parseInt(quantityString);
         }
         values.put(InventoryContract.ItemEntry.COLUMN_ITEM_QUANTITY, quantity);
-
-        Log.i(LOG_TAG, values.toString());
-
+        values.put(InventoryContract.ItemEntry.COLUMN_ITEM_PRICE, priceString);
+        values.put(InventoryContract.ItemEntry.COLUMN_ITEM_IMAGE, picByteArray);
+        Log.e("Saving item: ", values.toString());
         // Determine if this is a new or existing item by checking if mCurrentItemUri is null or not
         if (mCurrentItemUri == null) {
             // This is a NEW item, so insert a new item into the provider,
             // returning the content URI for the new item.
             Uri newUri = getContentResolver().insert(InventoryContract.ItemEntry.CONTENT_URI, values);
-
             // Show a toast message depending on whether or not the insertion was successful.
             if (newUri == null) {
                 // If the new content URI is null, then there was an error with insertion.
                 Toast.makeText(this, getString(R.string.editor_insert_item_failed),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_LONG).show();
             } else {
                 // Otherwise, the insertion was successful and we can display a toast.
                 Toast.makeText(this, getString(R.string.editor_insert_item_successful),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_LONG).show();
             }
         } else {
             // Otherwise this is an EXISTING item, so update the item with content URI: mCurrentItemUri
@@ -323,16 +312,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // because mCurrentItemUri will already identify the correct row in the database that
             // we want to modify.
             int rowsAffected = getContentResolver().update(mCurrentItemUri, values, null, null);
-
             // Show a toast message depending on whether or not the update was successful.
             if (rowsAffected == 0) {
                 // If no rows were affected, then there was an error with the update.
                 Toast.makeText(this, getString(R.string.editor_update_item_failed),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_LONG).show();
             } else {
                 // Otherwise, the update was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_update_item_successful),
-                        Toast.LENGTH_SHORT).show();
+
             }
         }
     }
@@ -365,7 +352,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
             if (resultData != null) {
                 Uri mUri = resultData.getData();
-                Log.i(LOG_TAG, "Uri: " + mUri.toString());
+                Log.e(LOG_TAG, "Uri: " + mUri.toString());
                 mPicImageView.setImageBitmap(getBitmapFromUri(mUri));
                 mPicImageView.setImageAlpha(255);
             }
